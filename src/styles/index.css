@@ -1,0 +1,159 @@
+@import url("./global.css");
+
+body {
+    margin: 0;
+    background-color: rgb(18, 18, 21);
+    font-family: "Outfit", sans-serif;
+    user-select: none;
+    -webkit-user-drag: none;
+    -moz-user-select: none;
+}
+
+img {
+    user-drag: none;
+    -webkit-user-drag: none;
+    -moz-user-select: none;
+    border: none;
+    outline: none;
+    display: block;
+    vertical-align: middle;
+}
+
+.appname {
+    color: white;
+}
+
+/* WARNINGS */
+.g {
+    color: var(--color-maroon)
+}
+
+/* CARD */
+.card {
+  background-color: var(--color-card);
+  padding: 20px;
+  border-radius: 5px;
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.card-img {
+  width: var(--image-size);
+  height: var(--image-size);
+  object-fit: cover;
+  border-radius: 5px;
+  user-select: none;
+  pointer-events: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  object-fit: cover;
+  display: block;
+}
+
+.rating {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-author {
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+#verifiedBadge {
+  background-image: url("../images/verifieduser.svg");
+  width: 20px;
+  height: 20px;
+}
+
+
+.card-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.card-description {
+  color: var(--color-muted);
+  margin-top: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  max-height: 4.5em;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.card-play {
+  background-color: var(--color-accent);
+  outline: none;
+  width: 100%;
+  max-width: 130px;
+  height: 45px;
+  padding: 0 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out;
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.card-play:hover {
+  transform: scale(1.15);
+}
+
+/* Main */
+#card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    row-gap: 70px;
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    background: #191A1F;
+    background: linear-gradient(180deg, rgba(25, 26, 31, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+nav > * {
+    margin: 0;
+}
+
+footer { 
+    bottom: 0;
+    margin: 0;
+    margin-top: 50px;
+    background-color: rgb(25, 26, 31);
+    padding-top: 30px;
+    padding-bottom: 100px;
+    padding-left: 70px;
+    padding-right: 70px;
+}
+
+footer > p {
+    color: var(--color-muted);
+    margin: 0;
+}

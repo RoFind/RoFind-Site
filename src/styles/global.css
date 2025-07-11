@@ -1,0 +1,9 @@
+:root {
+  --color-bg: rgb(18, 18, 21);
+  --color-card: rgb(39, 41, 48);
+  --color-text: white;
+  --color-muted: rgb(126, 126, 126);
+  --color-accent: rgb(51, 95, 255);
+  --color-maroon: rgb(150, 0, 0);
+  --image-size: 180px;
+}

@@ -1,0 +1,19 @@
+{
+  "name": "betterrobloxdiscovery",
+  "version": "1.0.0",
+  "description": "A third party Roblox discovery page",
+  "license": "ISC",
+  "author": "Try_Catch (4Hoursleft)",
+  "type": "commonjs",
+  "main": "./src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "electron": "^37.2.1",
+    "firebase": "^11.10.0",
+    "path": "^0.12.7"
+  }
+}

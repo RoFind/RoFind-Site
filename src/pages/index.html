@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>RoFind</title>
+  <link rel="stylesheet" href="../styles/index.css">
+
+  <!-- FONT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <nav>
+    <h1 class="appname">RoFind</h1>
+    <h1 class="g">IN DEVELOPMENT</h1>
+  </nav>
+
+
+  <!-- Container -->
+  <div id="card-container"></div>
+
+  <footer>
+    <p>RoFind is a Open-Source project providing a user supported game discovery alternative to the native Roblox discovery page.</p>
+    <p><strong>ROBLOX</strong> is a trademark owned by Roblox Corporation. All rights reserved to Roblox</p>
+  </footer>
+
+  <!-- CARDS -->
+
+  <script type="module">
+    import { createCard } from './components/card.js';
+  async function getUniverseId(placeId) {
+    const res = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
+    if (!res.ok) throw new Error(`Failed to get universeId for placeId ${placeId}`);
+    const data = await res.json();
+    return data.universeId;
+  }
+
+  async function fetchGameDetails(universeId) {
+    const res = await fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
+    if (!res.ok) throw new Error(`Failed to get game data for universeId ${universeId}`);
+    const data = await res.json();
+    return data.data[0];
+  }
+
+  async function fetchThumbnail(universeId) {
+    const res = await fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png&type=Circle`);
+    const data = await res.json();
+    return data.data[0]?.imageUrl || '';
+  }
+
+  const cardContainer = document.getElementById('card-container');
+
+  const renderCards = async () => {
+    const placeIds = await window.firebaseAPI.getGamePlaceIds(); // from preload (Firestore)
+    
+    for (const placeId of placeIds) {
+      try {
+        const universeId = await getUniverseId(placeId);
+        // console.log(`${placeId} Universe ${universeId}`);
+
+        const gameData = await fetchGameDetails(universeId);
+        const imageUrl = await fetchThumbnail(universeId);
+
+        let authorName = null;
+        let badge = document.querySelector("#verifiedBadge")
+        if (gameData.creator?.type == 'User') {
+          authorName = "@" + gameData.creator?.name
+        } else {
+          authorName = gameData.creator?.name
+        }
+
+        const card = createCard({
+          name: gameData.name,
+          description: gameData.description,
+          placeId,
+          imageUrl,
+          author: authorName || 'Unknown',
+          verified: gameData.creator?.hasVerifiedBadge ?? false
+        });
+
+
+        cardContainer.appendChild(card);
+      } catch (err) {
+        console.error(`Failed to load game for placeId ${placeId}:`, err);
+      }
+    }
+  };
+
+  renderCards();
+</script>
+
+</body>
+
+</html>
