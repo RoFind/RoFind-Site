@@ -1,6 +1,7 @@
 const {
   app,
-  BrowserWindow
+  BrowserWindow,
+  ipcMain
 } = require('electron');
 const path = require('path');
 
@@ -9,7 +10,7 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'core' ,'preload.cjs'),
+      preload: path.join(__dirname, 'core', 'preload.cjs'),
       contextIsolation: true,
       nodeIntegration: false,
       enableRemoteModule: false,
@@ -32,7 +33,14 @@ app.whenReady().then(() => {
   });
 });
 
+ipcMain.handle('open-roblox', (event, placeId) => {
+  const win = new BrowserWindow({
+    width: 800,
+    height: 300
+  });
+  win.loadURL('https://google.com');
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
-

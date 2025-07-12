@@ -7,6 +7,7 @@ body {
     user-select: none;
     -webkit-user-drag: none;
     -moz-user-select: none;
+    scroll-behavior: smooth;
 }
 
 img {
@@ -25,7 +26,8 @@ img {
 
 /* WARNINGS */
 .g {
-    color: var(--color-maroon)
+    color: var(--color-maroon);
+    font-size: small;
 }
 
 /* CARD */
@@ -136,10 +138,33 @@ nav {
     padding-bottom: 20px;
     padding-left: 20px;
     padding-right: 20px;
+    display: grid;
+    grid-template-columns: auto auto 1fr max-content;
+    gap: 20px;
+    align-items: center;
 }
 
 nav > * {
     margin: 0;
+    /* padding: 0; */
+}
+
+.game_submission {
+  /* padding: 20px; */
+  border-radius: 5px;
+  font-size: 20px;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  background-color: var(--color-accent);
+  color: white;
+  font-family: "Outfit";
+  cursor: pointer;
+  transition: transform .2s ease-in-out;
+}
+
+.game_submission:hover {
+  transform: scale(1.1);
 }
 
 footer { 

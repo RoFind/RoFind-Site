@@ -8,12 +8,12 @@ const { initializeApp, getApps } = require('firebase/app');
 const { getFirestore, collection, getDocs } = require('firebase/firestore');
 
 const firebaseConfig = {
-  apiKey: process.env.CORE_FIREBASE_API_KEY,
-  authDomain: process.env.CORE_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.CORE_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.CORE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.CORE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.CORE_FIREBASE_APP_ID
+  apiKey: 'AIzaSyCIcbHj7iH2bz4W3koGDZbauxfCKkiyArg',
+  authDomain: 'betterrobloxdiscovery.firebaseapp.com',
+  projectId: 'betterrobloxdiscovery',
+  storageBucket: 'betterrobloxdiscovery.firebasestorage.app',
+  messagingSenderId: '564230962947',
+  appId: '1:564230962947:web:7ee840bd9fdcee298bf336'
 };
 
 let db;
