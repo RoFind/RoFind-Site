@@ -2,14 +2,16 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>RoFind</title>
-  <link rel="stylesheet" href="../styles/index.css">
+  <link rel="stylesheet" href="../styles/global.css" />
+  <link rel="stylesheet" href="../styles/inputs.css" />
+  <link rel="stylesheet" href="../styles/index.css" />
 
   <!-- FONT -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
 </head>
 
 <body>
@@ -21,9 +23,37 @@
   </nav>
 
   <!-- Pop up -->
-  <div class="popup">
-    <form onsubmit="return;">
-      <input type="number" class="submission_placeId" />
+  <div class="popup" style="display: none">
+    <form onsubmit="return false;" class="submission-form">
+      <h3>Game Submission</h3>
+
+      <div class="game_submission_note">
+        <p>Your game submission will be reviewed before being displayed in public once submitted.</p>
+      </div>
+
+      <div>
+        <img id="submissions_game_preview" src="https://placehold.co/150?text=Game+Icon" alt="Game Icon" />
+        <p id="submissions_game_name"></p>
+      </div>
+
+      <div>
+        <label>Place ID:</label>
+
+        <input type="number" class="submission_placeId" min="1" />
+        <input id="checkplace" type="button" class="submission_button" value="Check" />
+
+        <p>
+          User:
+          <input type="button" class="sumissions_user submission_button" value="Sign in Roblox" />
+        </p>
+      </div>
+
+      <div style="display: flex; justify-content: space-evenly;">
+        <input id="game_submission_cancel" type="button" value="Cancel">
+        <input id="game_submission_submit" type="button" value="Submit" />
+      </div>
+
+
     </form>
   </div>
 
@@ -31,75 +61,136 @@
   <div id="card-container"></div>
 
   <footer>
-    <p>RoFind is a community-driven alternative to the native Roblox discovery page, helping users find games through shared support and recommendations.</p>
-    <p><strong>ROBLOX®</strong> is a registered trademark of Roblox Corporation. All rights and trademarks are the property of their respective owners.</p>
+    <p>
+      RoFind is a community-driven alternative to the native Roblox
+      discovery page, helping users find games through shared support
+      and recommendations.
+    </p>
+    <p>
+      <strong>ROBLOX®</strong> is a registered trademark of Roblox
+      Corporation. All rights and trademarks are the property of their
+      respective owners.
+    </p>
   </footer>
 
   <!-- CARDS -->
 
   <script type="module">
     import { createCard } from './components/card.js';
-  async function getUniverseId(placeId) {
-    const res = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
-    if (!res.ok) throw new Error(`Failed to get universeId for placeId ${placeId}`);
-    const data = await res.json();
-    return data.universeId;
-  }
+            async function getUniverseId(placeId) {
+              try {
+                const res = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
+                if (!res.ok) throw new Error(`Failed to get universeId for placeId ${placeId}`);
+                const data = await res.json();
+                return data.universeId;
+              } catch {
+                return;
+              }
+              
+            }
 
-  async function fetchGameDetails(universeId) {
-    const res = await fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
-    if (!res.ok) throw new Error(`Failed to get game data for universeId ${universeId}`);
-    const data = await res.json();
-    return data.data[0];
-  }
+            async function fetchGameDetails(universeId) {
+              const res = await fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
+              if (!res.ok) throw new Error(`Failed to get game data for universeId ${universeId}`);
+              const data = await res.json();
+              return data.data[0];
+            }
 
-  async function fetchThumbnail(universeId) {
-    const res = await fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png&type=Circle`);
-    const data = await res.json();
-    return data.data[0]?.imageUrl || '';
-  }
+            async function fetchThumbnail(universeId) {
+              const res = await fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png&type=Circle`);
+              const data = await res.json();
+              return data.data[0]?.imageUrl || '';
+            }
 
-  const cardContainer = document.getElementById('card-container');
+            const cardContainer = document.getElementById('card-container');
 
-  const renderCards = async () => {
-    const placeIds = await window.firebaseAPI.getGamePlaceIds(); // from preload (Firestore)
-    
-    for (const placeId of placeIds) {
-      try {
-        const universeId = await getUniverseId(placeId);
-        // console.log(`${placeId} Universe ${universeId}`);
+            const renderCards = async () => {
+              const placeIds = await window.firebaseAPI.getGamePlaceIds(); // from preload (Firestore)
 
-        const gameData = await fetchGameDetails(universeId);
-        const imageUrl = await fetchThumbnail(universeId);
+              for (const placeId of placeIds) {
+                try {
+                  const universeId = await getUniverseId(placeId);
+                  // console.log(`${placeId} Universe ${universeId}`);
 
-        let authorName = null;
-        let badge = document.querySelector("#verifiedBadge")
-        if (gameData.creator?.type == 'User') {
-          authorName = "@" + gameData.creator?.name
-        } else {
-          authorName = gameData.creator?.name
-        }
+                  const gameData = await fetchGameDetails(universeId);
+                  const imageUrl = await fetchThumbnail(universeId);
 
-        const card = createCard({
-          name: gameData.name,
-          description: gameData.description,
-          placeId,
-          imageUrl,
-          author: authorName || 'Unknown',
-          verified: gameData.creator?.hasVerifiedBadge ?? false
-        });
+                  let authorName = null;
+                  let badge = document.querySelector("#verifiedBadge")
+                  if (gameData.creator?.type == 'User') {
+                    authorName = "@" + gameData.creator?.name
+                  } else {
+                    authorName = gameData.creator?.name
+                  }
+
+                  const card = createCard({
+                    name: gameData.name,
+                    description: gameData.description,
+                    placeId,
+                    imageUrl,
+                    author: authorName || 'Unknown',
+                    starIcon: "../images/star.svg",
+                    verifiedIcon: "../images/verifieduser.png",
+                    verified: gameData.creator?.hasVerifiedBadge ?? false
+                  });
 
 
-        cardContainer.appendChild(card);
-      } catch (err) {
-        console.error(`Failed to load game for placeId ${placeId}:`, err);
-      }
-    }
-  };
+                  cardContainer.appendChild(card);
+                } catch (err) {
+                  console.error(`Failed to load game for placeId ${placeId}:`, err);
+                }
+              }
+            };
+            renderCards();
 
-  renderCards();
-</script>
+              const popup = document.querySelector(".popup")
+              const submission_form = popup.querySelector(".submission-form");
+              const submission_icon_preview = submission_form.querySelector("#submissions_game_preview")
+              const submission_game_name = submission_form.querySelector("#submissions_game_name")
+              const placeid = submission_form.querySelector("input[type='number']");
+              const checkplace = submission_form.querySelector("#checkplace");
 
+              const open_popup = document.querySelector(".game_submission")
+              const submit_btn = submission_form.querySelector("#game_submission_submit");
+              const cancel_btn = submission_form.querySelector("#game_submission_cancel");
+
+              checkplace.addEventListener("click", async (e) => {
+                e.preventDefault();
+                try {
+                  const place = await getUniverseId(placeid.value);
+                  const gameDetails = await fetchGameDetails(place);
+
+                  submission_icon_preview.src = await fetchThumbnail(place)
+                  submission_game_name.innerHTML = gameDetails.name;
+
+                  place.style.removeProperty('border-color')
+
+                  checkplace.disabled = true;
+                  checkplace.style.color = "grey";
+                } catch (err) {
+                  // console.error("Game Submission Error ->", placeid.value, err);
+                  placeid.style = "border-color: red;"
+                  return;
+                }
+              });
+
+              open_popup.addEventListener("click", () => {
+                popup.style.display = "block";
+              })
+              
+              submit_btn.addEventListener("click", () => {
+                console.log("Sumission");
+              })
+
+              cancel_btn.addEventListener("click", () => {
+                submission_icon_preview.src = "https://placehold.co/150?text=Game+Icon"
+                submission_game_name.innerHTML = ""
+                placeid.value = "";
+                checkplace.disabled = false
+                checkplace.style.color = "white"
+                popup.style.display = "none";
+              })
+        </script>
 </body>
 
 </html>

@@ -1,33 +1,33 @@
 @import url("./global.css");
 
 body {
-    margin: 0;
-    background-color: rgb(18, 18, 21);
-    font-family: "Outfit", sans-serif;
-    user-select: none;
-    -webkit-user-drag: none;
-    -moz-user-select: none;
-    scroll-behavior: smooth;
+  margin: 0;
+  background-color: rgb(18, 18, 21);
+  font-family: "Outfit", sans-serif;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+  scroll-behavior: smooth;
 }
 
 img {
-    user-drag: none;
-    -webkit-user-drag: none;
-    -moz-user-select: none;
-    border: none;
-    outline: none;
-    display: block;
-    vertical-align: middle;
+  user-drag: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+  border: none;
+  outline: none;
+  display: block;
+  vertical-align: middle;
 }
 
 .appname {
-    color: white;
+  color: white;
 }
 
 /* WARNINGS */
 .g {
-    color: var(--color-maroon);
-    font-size: small;
+  color: var(--color-maroon);
+  font-size: small;
 }
 
 /* CARD */
@@ -40,6 +40,13 @@ img {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .card-img {
@@ -57,8 +64,8 @@ img {
 }
 
 .rating {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .author-info {
@@ -77,7 +84,6 @@ img {
   width: 20px;
   height: 20px;
 }
-
 
 .card-title {
   font-size: 20px;
@@ -120,33 +126,27 @@ img {
 
 /* Main */
 #card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 24px;
-    row-gap: 70px;
-    padding: 24px;
-    max-width: 1200px;
-    margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  row-gap: 70px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-nav {
-    position: sticky;
-    top: 0;
-    background: #191A1F;
-    background: linear-gradient(180deg, rgba(25, 26, 31, 1) 0%, rgba(255, 255, 255, 0) 100%);
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    display: grid;
-    grid-template-columns: auto auto 1fr max-content;
-    gap: 20px;
-    align-items: center;
-}
-
-nav > * {
-    margin: 0;
-    /* padding: 0; */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+  padding: 50px;
+  box-sizing: border-box;
 }
 
 .game_submission {
@@ -159,26 +159,74 @@ nav > * {
   background-color: var(--color-accent);
   color: white;
   font-family: "Outfit";
-  cursor: pointer;
   transition: transform .2s ease-in-out;
 }
 
 .game_submission:hover {
   transform: scale(1.1);
+  background-color: var(--color-accent);
 }
 
-footer { 
-    bottom: 0;
-    margin: 0;
-    margin-top: 50px;
-    background-color: rgb(25, 26, 31);
-    padding-top: 30px;
-    padding-bottom: 100px;
-    padding-left: 70px;
-    padding-right: 70px;
+form>h3 {
+  margin: 0;
 }
 
-footer > p {
-    color: var(--color-muted);
-    margin: 0;
+.popup>form {
+  color: var(--color-text);
+  background-color: var(--color-card);
+  padding: 20px;
+  border-radius: 10px;
+  filter: drop-shadow(0px 0px var(--drop-shadow-blur) black);
+  max-width: 350px;
+  width: 100%;
+}
+
+form>div {
+  margin-top: 15px;
+  text-align: center;
+  justify-items: center;
+}
+
+form>div>img {
+  border-radius: 5px;
+}
+
+#game_submission_note {
+  background-color: var9;
+}
+
+#submissions_game_preview {
+  width: 150px;
+}
+
+.game_submission_note {
+  background-color: var(--submission-note-bg);
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 5px;
+  border: 3px solid var(--submission-note-border);
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.game_submission_note>p {
+  margin: 0;
+}
+
+#game_submission_submit {
+  background-color: var(--color-accent);
+  color: var(--color-text);
+  outline: none;
+  border: none;
+  padding: 10px 30px;
+  cursor: pointer;
+}
+
+#game_submission_cancel {
+  background-color: none;
+  color: var(--color-text);
+  /* outline: none; */
+  /* border: none; */
+  padding: 10px 30px;
+  cursor: pointer;
 }

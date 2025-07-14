@@ -4,6 +4,9 @@ const fs = require('fs');
 const dotenvPath = path.resolve(process.cwd(), '.env');
 require('dotenv').config({ path: dotenvPath });
 
+var webFrame = require('electron').webFrame;
+webFrame.setVisualZoomLevelLimits(1, 1);
+
 const { initializeApp, getApps } = require('firebase/app');
 const { getFirestore, collection, getDocs } = require('firebase/firestore');
 
