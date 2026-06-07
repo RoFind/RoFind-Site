@@ -1,8 +1,8 @@
 @import url("./global.css");
 
 :root {
-    --radius: 5px;
-    --outline: 2px solid grey;
+  --radius: 5px;
+  --outline: 2px solid grey;
 }
 
 input::-webkit-outer-spin-button,
@@ -10,25 +10,27 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
 }
 
-input  {
-    color: var(--color-text);
-    border-radius: var(--radius);
-    padding: 3px;
-    border: var(--outline);
-    outline: none;
-    -moz-user-focus: none;
-    background-color: var(--color-input-fields);
-    transition: background-color .2s ease-in-out;
+input {
+  color: var(--color-text);
+  border-radius: var(--radius);
+  padding: 3px;
+  border: var(--outline);
+  outline: none;
+  -moz-user-focus: none;
+  background-color: var(--color-input-fields);
+  transition: background-color .2s ease-in-out;
 
 }
 
 input[type=button] {
   cursor: pointer;
+  padding: 2px 12px 2px 12px;
 }
 
 /* Pseudo */

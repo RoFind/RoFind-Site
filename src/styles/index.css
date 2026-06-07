@@ -47,6 +47,7 @@ img {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
+  gap: 20px
 }
 
 .card-img {

@@ -5,7 +5,7 @@ const {
 } = require('electron');
 const path = require('path');
 
-function createWindow() {
+function mainWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -29,10 +29,10 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  createWindow();
+  mainWindow();
 
   app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) mainWindow();
   });
 });
 
@@ -41,7 +41,7 @@ ipcMain.handle('open-roblox', (event, placeId) => {
     width: 800,
     height: 300
   });
-  win.loadURL('https://google.com');
+  win.loadURL("https://apis.roblox.com/oauth/v1/authorize?client_id=8424212320330349269&code_challenge=PLEKKVCjdD1V_07wOKlAm7P02NC-LZ_1hQfdu5XSXEI&code_challenge_method=S256&redirect_uri=https://ro-find.vercel.app/redirect.html&scope=openid%20profile&response_type=code");
 });
 
 app.on('window-all-closed', () => {
