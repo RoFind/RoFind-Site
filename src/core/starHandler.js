@@ -1,0 +1,1 @@
+// TODO: Star handler - Calculate star rating

@@ -69,6 +69,20 @@ img {
   flex-direction: column;
 }
 
+.star-rating {
+  display: flex;
+  flex-direction: column;
+  /* change to column if vertical */
+  align-items: center;
+  gap: 4px;
+}
+
+.star-label {
+  color: white;
+  font-size: 13px;
+  margin-left: 4px;
+}
+
 .author-info {
   display: flex;
   align-items: center;

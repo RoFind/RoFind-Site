@@ -1,9 +1,14 @@
 const {
   app,
   BrowserWindow,
-  ipcMain
+  ipcMain,
+  session
 } = require('electron');
 const path = require('path');
+
+const { URL } = require('node:url')
+
+const isDev = !app.isPackaged;
 
 function mainWindow() {
   const win = new BrowserWindow({
@@ -47,3 +52,28 @@ ipcMain.handle('open-roblox', (event, placeId) => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
+
+if (!isDev) {
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F12' || (input.control && input.shift && input.key === 'I')) {
+      event.preventDefault();
+    }
+  });
+}
+
+// Session Secuityr
+session
+  .defaultSession
+  .setPermissionRequestHandler((webContents, permission, callback) => {
+    const parsedUrl = new URL(webContents.getURL());
+
+    if (['notifications', 'camera', 'location', 'microphone'].includes(permission)) {
+      return callback(false);
+    }
+
+    if (parsedUrl.protocol !== 'https:') {
+      return callback(false);
+    }
+
+    callback(true);
+  });

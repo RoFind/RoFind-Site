@@ -77,51 +77,97 @@
 
   <script type="module">
     import { createCard } from './components/card.js';
-    async function getUniverseId(placeId) {
+
+    // ── Cache ──────────────────────────────────────────────────────────────────
+
+    const TTL_MS = 1000 * 60 * 60;
+
+    function loadCache() {
       try {
+        return JSON.parse(localStorage.getItem('roblox-cache') || '{}');
+      } catch {
+        return {};
+      }
+    }
+
+    function saveCache(cache) {
+      localStorage.setItem('roblox-cache', JSON.stringify(cache));
+    }
+
+    const cache = loadCache();
+
+    async function getCached(key, fetchFn) {
+      const cached = cache[key];
+      if (cached && Date.now() - cached.fetchedAt < TTL_MS) return cached.data;
+      const data = await fetchFn();
+      cache[key] = { data, fetchedAt: Date.now() };
+      saveCache(cache);
+      return data;
+    }
+
+    // ── Roblox API ─────────────────────────────────────────────────────────────
+
+    async function getUniverseId(placeId) {
+      return getCached(`universe_${placeId}`, async () => {
         const res = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
         if (!res.ok) throw new Error(`Failed to get universeId for placeId ${placeId}`);
         const data = await res.json();
         return data.universeId;
-      } catch {
-        return;
-      }
-
+      });
     }
 
     async function fetchGameDetails(universeId) {
-      const res = await fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
-      if (!res.ok) throw new Error(`Failed to get game data for universeId ${universeId}`);
-      const data = await res.json();
-      return data.data[0];
+      return getCached(`details_${universeId}`, async () => {
+        const res = await fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
+        if (!res.ok) throw new Error(`Failed to get game data for universeId ${universeId}`);
+        const data = await res.json();
+        return data.data[0];
+      });
     }
 
     async function fetchThumbnail(universeId) {
-      const res = await fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png&type=Circle`);
-      const data = await res.json();
-      return data.data[0]?.imageUrl || '';
+      return getCached(`thumb_${universeId}`, async () => {
+        const res = await fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png&type=Circle`);
+        const data = await res.json();
+        return data.data[0]?.imageUrl || '';
+      });
     }
+
+    // ── Cards ──────────────────────────────────────────────────────────────────
 
     const cardContainer = document.getElementById('card-container');
 
     const renderCards = async () => {
-      const placeIds = await window.firebaseAPI.getGamePlaceIds(); // from preload (Firestore)
+      const placeIds = await window.firebaseAPI.getGamePlaceIds();
+
+      // remove cache entries for deleted games
+      const cachedKeys = Object.keys(cache);
+      cachedKeys.forEach(key => {
+        const placeId = key.replace(/^(universe_|details_|thumb_)/, '');
+        if (!placeIds.includes(placeId) && !placeIds.includes(Number(placeId))) {
+          delete cache[key];
+        }
+      });
+      saveCache(cache);
 
       for (const placeId of placeIds) {
         try {
           const universeId = await getUniverseId(placeId);
-          // console.log(`${placeId} Universe ${universeId}`);
 
-          const gameData = await fetchGameDetails(universeId);
-          const imageUrl = await fetchThumbnail(universeId);
+          const [gameData, imageUrl, firestoreData] = await Promise.all([
+            fetchGameDetails(universeId),
+            fetchThumbnail(universeId),
+            window.firebaseAPI.getGameDetails(placeId),
+          ]);
 
-          let authorName = null;
-          let badge = document.querySelector("#verifiedBadge")
-          if (gameData.creator?.type == 'User') {
-            authorName = "@" + gameData.creator?.name
-          } else {
-            authorName = gameData.creator?.name
+          if (!gameData) {
+            console.warn(`Skipping placeId ${placeId} — game not found on Roblox`);
+            continue;
           }
+
+          const authorName = gameData.creator?.type === 'User'
+            ? '@' + gameData.creator?.name
+            : gameData.creator?.name;
 
           const card = createCard({
             name: gameData.name,
@@ -129,11 +175,10 @@
             placeId,
             imageUrl,
             author: authorName || 'Unknown',
-            starIcon: "../images/star_filled.svg",
-            verifiedIcon: "../images/verifieduser.png",
-            verified: gameData.creator?.hasVerifiedBadge ?? false
+            rating: firestoreData?.user_rating ?? 0,
+            verifiedIcon: '../images/verifieduser.png',
+            verified: gameData.creator?.hasVerifiedBadge ?? false,
           });
-
 
           cardContainer.appendChild(card);
         } catch (err) {
@@ -141,18 +186,19 @@
         }
       }
     };
+
     renderCards();
 
-    const popup = document.querySelector(".popup")
+    // ── Popup ──────────────────────────────────────────────────────────────────
+
+    const popup = document.querySelector(".popup");
     const submission_form = popup.querySelector(".submission-form");
-    const submission_icon_preview = submission_form.querySelector("#submissions_game_preview")
-    const submission_game_name = submission_form.querySelector("#submissions_game_name")
+    const submission_icon_preview = submission_form.querySelector("#submissions_game_preview");
+    const submission_game_name = submission_form.querySelector("#submissions_game_name");
     const placeid = submission_form.querySelector("input[type='number']");
     const checkplace = submission_form.querySelector("#checkplace");
-
-    const verify_user = submission_form.querySelector("#sign_in_roblox")
-
-    const open_popup = document.querySelector(".game_submission")
+    const verify_user = submission_form.querySelector("#sign_in_roblox");
+    const open_popup = document.querySelector(".game_submission");
     const submit_btn = submission_form.querySelector("#game_submission_submit");
     const cancel_btn = submission_form.querySelector("#game_submission_cancel");
 
@@ -162,40 +208,40 @@
         const place = await getUniverseId(placeid.value);
         const gameDetails = await fetchGameDetails(place);
 
-        submission_icon_preview.src = await fetchThumbnail(place)
+        submission_icon_preview.src = await fetchThumbnail(place);
         submission_game_name.innerHTML = gameDetails.name;
 
-        place.style.removeProperty('border-color')
-
+        placeid.style.removeProperty('border-color');
         checkplace.disabled = true;
         checkplace.style.color = "grey";
       } catch (err) {
         console.error("Game Submission Error ->", placeid.value, err);
-        placeid.style = "border-color: red;"
-        return;
+        placeid.style = "border-color: red;";
       }
     });
 
     open_popup.addEventListener("click", () => {
       popup.style.display = "block";
-    })
+    });
 
     verify_user.addEventListener("click", async () => {
-
-    })
+      console.log("Verify User");
+      // TODO: Verify
+    });
 
     submit_btn.addEventListener("click", () => {
-      console.log("Sumission");
-    })
+      console.log("Submission");
+      // TODO: Submission
+    });
 
     cancel_btn.addEventListener("click", () => {
-      submission_icon_preview.src = "https://placehold.co/150?text=Game+Icon"
-      submission_game_name.innerHTML = ""
+      submission_icon_preview.src = "https://placehold.co/150?text=Game+Icon";
+      submission_game_name.innerHTML = "";
       placeid.value = "";
-      checkplace.disabled = false
-      checkplace.style.color = "white"
+      checkplace.disabled = false;
+      checkplace.style.color = "white";
       popup.style.display = "none";
-    })
+    });
   </script>
 </body>
 
