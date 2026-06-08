@@ -6,3 +6,5 @@ window.addEventListener('online', updateOnlineStatus)
 window.addEventListener('offline', updateOnlineStatus)
 
 updateOnlineStatus()
+
+// TODO: Check if device is online

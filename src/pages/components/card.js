@@ -54,9 +54,6 @@ export function createCard({
         </p>
       </div>
       <p class="card-description">${description}</p>
-      <div>
-        <!-- <button class="card-play">Play</button> -->
-      </div>
     </div>
   `;
 

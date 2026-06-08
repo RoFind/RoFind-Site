@@ -4,7 +4,13 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: './src/core/icon.ico'
+    icon: './src/core/icon.ico',
+    // protocols: [
+    //   {
+    //     name: 'RoFind',
+    //     schemes: ['rofind']
+    //   }
+    // ]
   },
   rebuildConfig: {},
   makers: [

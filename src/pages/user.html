@@ -12,8 +12,6 @@
   <link rel="stylesheet" href="../styles/card.css">
   <link rel="stylesheet" href="../styles/user.css">
 
-  <script type="module" src="../core/scripts/submissionForm.js"></script>
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
@@ -25,7 +23,9 @@
     <h1 class="g">IN DEVELOPMENT</h1>
     <div></div>
     <input class="game_submission" type="button" value="Submit Game" />
-    <a class="user" type="button" href="./user.html">User</a>
+    <input class="normal_button" type="button" value="User" onclick="window.location.href='./user.html'"
+      style="padding-left: 30px; padding-right: 30px;" />
+    <!-- <a class="user" type="button" href="./user.html">User</a> -->
   </nav>
 
   <div id="user-container">
@@ -36,8 +36,19 @@
       <div id="user-info">
         <h2 id="user-display-name">—</h2>
         <p id="user-username">@—</p>
+        <input type="button" id="sign-in-btn" class="submission_button" value="Sign In" />
         <input type="button" id="sign-out-btn" class="submission_button" value="Sign Out" />
       </div>
+    </div>
+
+    <div id="user-profile" style="display: flex; flex-direction: column; align-items: flex-start;">
+      <h1>Rating Collection</h1>
+      <p>Soon...</p>
+    </div>
+
+    <div id="user-profile" style="display: flex; flex-direction: column; align-items: flex-start;">
+      <h1>Comments</h1>
+      <p>Soon...</p>
     </div>
 
   </div>
@@ -56,11 +67,16 @@
   </footer>
 
   <script type="module">
-    const userId = localStorage.getItem('roblox_user_id');
+    const userIdRaw = localStorage.getItem('roblox_user_id');
+    const userId = Number(userIdRaw);
 
-    if (!userId) {
-      document.getElementById('user-display-name').textContent = 'Not signed in';
-      document.getElementById('user-username').textContent = '';
+    const nameEl = document.getElementById('user-display-name');
+    const usernameEl = document.getElementById('user-username');
+    const avatarEl = document.getElementById('user-avatar');
+
+    if (!userIdRaw || !Number.isFinite(userId)) {
+      nameEl.textContent = 'Not signed in';
+      usernameEl.textContent = '';
     } else {
       try {
         const [userRes, avatarRes] = await Promise.all([
@@ -68,16 +84,52 @@
           fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png`)
         ]);
 
+        if (!userRes.ok) {
+          throw new Error(`User API failed: ${userRes.status}`);
+        }
+
+        if (!avatarRes.ok) {
+          throw new Error(`Avatar API failed: ${avatarRes.status}`);
+        }
+
         const userData = await userRes.json();
         const avatarData = await avatarRes.json();
 
-        document.getElementById('user-display-name').textContent = userData.displayName;
-        document.getElementById('user-username').textContent = '@' + userData.name;
-        document.getElementById('user-avatar').src = avatarData.data[0]?.imageUrl || '';
+        const avatarUrl = avatarData?.data?.[0]?.imageUrl;
+
+        nameEl.textContent = userData.displayName || 'Unknown';
+        usernameEl.textContent = userData.name ? `@${userData.name}` : '';
+
+        if (avatarUrl) {
+          avatarEl.src = avatarUrl;
+        }
       } catch (err) {
         console.error('Failed to load user data:', err);
+
+        nameEl.textContent = 'Error loading profile';
+        usernameEl.textContent = '';
       }
     }
+
+    document.getElementById('sign-in-btn').addEventListener('click', async () => {
+      try {
+        const session = await window.oauthAPI.loginRoblox();
+
+        if (!session?.userId || !session?.accessToken) {
+          throw new Error('Invalid OAuth session returned');
+        }
+
+        console.log(session);
+
+        localStorage.setItem('roblox_access_token', session.accessToken);
+        localStorage.setItem('roblox_user_id', String(session.userId));
+        localStorage.setItem('roblox_name', session.name || '');
+
+        location.reload();
+      } catch (e) {
+        console.error('OAuth failed:', e);
+      }
+    });
   </script>
 </body>
 

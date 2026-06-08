@@ -30,7 +30,8 @@
     <h1 class="g">IN DEVELOPMENT</h1>
     <div></div>
     <input class="game_submission" type="button" value="Submit Game" />
-    <a class="user" type="button" value="User" href="./user.html">User</a>
+    <input class="normal_button" type="button" value="User" onclick="window.location.href='./user.html'"
+      style="padding-left: 30px; padding-right: 30px;" />
   </nav>
 
   <!-- Pop up -> SUBMISSION -->
@@ -69,6 +70,10 @@
 
   <div class="popup" id="view_game" style="display:none">
     <div class="view_container">
+
+      <input onclick="document.getElementById('view_game').style.display='none'" type="button" value="Close"
+        class="normal_button">
+
       <img src="" alt="Game Thumbnail" id="game_thumbnail" />
       <div id="leftside">
 
@@ -98,7 +103,7 @@
         </div>
 
         <!-- Play Button -->
-        <button id="play_btn" onclick="startGame()">
+        <button id="play_btn" class="game_submission" onclick="startGame()">
           ▶ Play Now
         </button>
 

@@ -1,58 +1,46 @@
-// Sumission Form ahhhh
-import * as RobloxApi from './api.js'
+import * as RobloxApi from './api.js';
 
 const popup = document.querySelector(".popup");
-const form = popup.querySelector(".submission-form");
+const gameSubmissionBtn = document.querySelector(".game_submission");
 
-const gameSubmissionBtn = document.querySelector(".game_submission")
+const form = popup?.querySelector(".submission-form");
 
 const ui = {
-    iconPreview: form.querySelector("#submissions_game_preview"),
-    gameName: form.querySelector("#submissions_game_name"),
-    placeId: form.querySelector("input[type='number']"),
-    checkPlace: form.querySelector("#checkplace"),
-    verifyUser: form.querySelector("#sign_in_roblox"),
-    openPopup: document.querySelector(".game_submission"),
-    submitBtn: form.querySelector("#game_submission_submit"),
-    cancelBtn: form.querySelector("#game_submission_cancel"),
+    iconPreview: form?.querySelector("#submissions_game_preview"),
+    gameName: form?.querySelector("#submissions_game_name"),
+    placeId: form?.querySelector("input[type='number']"),
+    checkPlace: form?.querySelector("#checkplace"),
+    verifyUser: form?.querySelector("#sign_in_roblox"),
+    submitBtn: form?.querySelector("#game_submission_submit"),
+    cancelBtn: form?.querySelector("#game_submission_cancel"),
 };
 
 async function checkPlaceId() {
     try {
-        const place = await RobloxApi.getUniverseId(ui.placeid.value);
-        const gameDetails = await RobloxApi.fetchGameDetails(place);
+        const universeId = await RobloxApi.getUniverseId(ui.placeId.value);
+        const gameDetails = await RobloxApi.fetchGameDetails(universeId);
+        const thumbnail = await RobloxApi.fetchThumbnail(universeId);
 
-        submission_icon_preview.src = await RobloxApi.fetchThumbnail(place);
-        submission_game_name.innerHTML = gameDetails.name;
-
-        placeid.style.removeProperty('border-color');
-        checkplace.disabled = true;
-        checkplace.style.color = "grey";
+        ui.iconPreview.src = thumbnail;
+        ui.gameName.textContent = gameDetails.name;
+        ui.placeId.style.removeProperty('border-color');
+        ui.checkPlace.disabled = true;
+        ui.checkPlace.style.color = "grey";
     } catch (err) {
-        console.error("Game Submission Error ->", placeid.value, err);
-        placeid.style = "border-color: red;";
+        console.error("Game Submission Error ->", ui.placeId.value, err);
+        ui.placeId.style.borderColor = "red";
     }
 }
 
-// checkplace.addEventListener("click", async (e) => {
-//     e.preventDefault();
-// });
-
-
-function openSumissionForm() {
+function openSubmissionForm() {
     popup.style.display = "block";
 }
 
-// open_popup.addEventListener("click", () => {
-// });
-
 function verifyUser() {
-    // TODO: Verify
     console.log("Verify User");
 }
 
 function submitSubmission() {
-    // TODO: Submission
     console.log("Submission");
 }
 
@@ -66,14 +54,8 @@ function cancelSubmission() {
     popup.style.display = "none";
 }
 
-gameSubmissionBtn.addEventListener("click", () => {
-    openSumissionForm()
-});
-
-ui.cancelBtn.addEventListener("click", () => {
-    cancelSubmission()
-});
-
-ui.checkPlace.addEventListener("click", () => {
-    checkPlaceId()
-});
+gameSubmissionBtn?.addEventListener("click", openSubmissionForm);
+ui.cancelBtn?.addEventListener("click", cancelSubmission);
+ui.checkPlace?.addEventListener("click", checkPlaceId);
+ui.verifyUser?.addEventListener("click", verifyUser);
+ui.submitBtn?.addEventListener("click", submitSubmission);

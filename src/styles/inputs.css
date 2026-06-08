@@ -25,7 +25,17 @@ input {
   -moz-user-focus: none;
   background-color: var(--color-input-fields);
   transition: background-color .2s ease-in-out;
+}
 
+.normal_button {
+  color: var(--color-bg);
+  background-color: var(--button-color-normal);
+
+  font-size: 20px;
+  box-sizing: border-box;
+  font-family: "Outfit", sans-serif;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .game_submission {
@@ -37,17 +47,19 @@ input {
   background-color: var(--color-accent);
   color: var(--color-text);
   font-family: "Outfit", sans-serif;
-  transition: transform 0.2s ease-in-out;
+  /* transition: transform 0.2s ease-in-out; */
   cursor: pointer;
 }
 
-.game_submission:hover {
+/* .game_submission:hover {
   transform: scale(1.1);
-}
+} */
 
 input[type="button"] {
   cursor: pointer;
   padding: 10px 24px;
+  outline: none;
+  border: none;
 }
 
 input[type=button].submission_button:hover {

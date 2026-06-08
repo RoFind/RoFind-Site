@@ -1,10 +1,15 @@
 # RoFind
 > Community-driven game discovery — find and share the best games, curated by players.
 
-![Status](https://img.shields.io/badge/status-in%20development-orange)
+![Status](https://img.shields.io/badge/status-In%20Development-orange)
 ![License](https://img.shields.io/badge/license-Custom-red)
 
 ---
+
+![Card](./src/images/Preview/Preview.png)
+![User](./src/images/Preview/User.png)
+![Main](./src/images/Preview/Main.png)
+
 
 ## Overview
 RoFind is an open-source platform where the community recommends, rates, and discovers games together. No algorithms — just real players sharing what's worth playing.

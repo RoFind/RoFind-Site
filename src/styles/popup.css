@@ -59,10 +59,6 @@
         transition: transform 0.2s ease-in-out;
     }
 
-    .game_submission:hover {
-        transform: scale(1.1);
-    }
-
     .game_submission_note {
         background-color: var(--submission-note-bg);
         padding: 0 20px;
@@ -102,5 +98,60 @@
 
     .view_container>#game_thumbnail {
         width: 50px;
+    }
+
+
+
+
+
+
+
+    .view_container {
+        background-color: var(--color-card);
+        padding: var(--popup-padding);
+        width: min(700px, 90vw);
+        border-radius: 12px;
+
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 20px;
+
+        color: var(--color-text);
+        position: relative;
+        box-sizing: border-box;
+    }
+
+    /* thumbnail */
+    #game_thumbnail {
+        width: 160px;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    /* text section */
+    #leftside {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* close button (if inside container) */
+    .view_container .normal_button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    /* responsive fallback */
+    @media (max-width: 600px) {
+        .view_container {
+            grid-template-columns: 1fr;
+        }
+
+        #game_thumbnail {
+            width: 100%;
+            height: auto;
+        }
     }
 }

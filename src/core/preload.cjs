@@ -1,4 +1,13 @@
-const { contextBridge, shell } = require('electron');
+console.log(`
+                                             
+ _____ _____ _____ __    _____ _____ ____  
+|  _  | __  |   __|  |  |     |  _  |    \ 
+|   __|    -|   __|  |__|  |  |     |  |  |
+|__|  |__|__|_____|_____|_____|__|__|____/ 
+                                           
+  `)
+
+const { contextBridge, shell, ipcMain, ipcRenderer } = require('electron');
 const path = require('path');
 const https = require('https');
 const { mkdirSync, existsSync, createWriteStream, unlinkSync } = require('fs');
@@ -149,5 +158,9 @@ contextBridge.exposeInMainWorld('imageAPI', {
 });
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  openRoblox: (placeId) => shell.openExternal(`roblox://placeId=${placeId}`)
+  openRoblox: (placeId) => shell.openExternal(`roblox://placeId=${placeId}`),
+});
+
+contextBridge.exposeInMainWorld('oauthAPI', {
+  loginRoblox: () => ipcRenderer.invoke('oauth:roblox')
 });

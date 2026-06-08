@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>RoFind — User</title>
+    <title>RoFind</title>
     <link rel="stylesheet" href="../styles/global.css">
     <link rel="stylesheet" href="../styles/base.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -65,26 +65,12 @@
         const guestBanner = document.getElementById('guest-banner');
 
         if (!userId) {
-            loginCard.style.display = 'block';
+            var thing = document.createElement("h1")
+                .append("HI")
+
+            console.warn("No user is logged in!")
         } else {
-            try {
-                const [userRes, avatarRes] = await Promise.all([
-                    fetch(`https://users.roblox.com/v1/users/${userId}`),
-                    fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png`)
-                ]);
-
-                const userData = await userRes.json();
-                const avatarData = await avatarRes.json();
-
-                document.getElementById('user-display-name').textContent = userData.displayName;
-                document.getElementById('user-username').textContent = '@' + userData.name;
-                document.getElementById('user-avatar').src = avatarData.data[0]?.imageUrl || '';
-
-                userProfile.style.display = 'flex';
-            } catch (err) {
-                console.error('Failed to load user:', err);
-                loginCard.style.display = 'block';
-            }
+            window.location.href = './user.html'
         }
 
         document.getElementById('sign-in-btn').addEventListener('click', () => {

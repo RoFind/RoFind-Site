@@ -11,6 +11,9 @@
   --color-input-button-hover: rgb(48, 50, 59);
   --color-disabled-button: grey;
 
+  /* Buttons */
+  --button-color-normal: rgb(255, 255, 255);
+
   --submission-note-bg: rgb(247, 246, 131);
   --submission-note-border: rgb(255, 204, 0);
   --submission-note-text: rgb(0, 0, 0);
@@ -27,7 +30,7 @@ nav {
   background: linear-gradient(180deg, rgb(25, 26, 31) 0%, rgba(255, 255, 255, 0) 100%);
   padding: 20px;
   display: grid;
-  grid-template-columns: auto auto 1fr max-content;
+  grid-template-columns: auto auto 1fr max-content max-content;
   gap: 20px;
   align-items: center;
 }
