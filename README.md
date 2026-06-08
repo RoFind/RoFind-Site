@@ -1,44 +1,37 @@
 # RoFind
-> Community-driven game discovery platform — find and share the best games, curated by players.
+> Community-driven game discovery — find and share the best games, curated by players.
 
 ![Status](https://img.shields.io/badge/status-in%20development-orange)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Open Source](https://img.shields.io/badge/open%20source-yes-brightgreen)
+![License](https://img.shields.io/badge/license-Custom-red)
 
 ---
 
 ## Overview
-RoFind is an open-source platform where the community recommends, rates, and discovers games together. No algorithms just real players sharing what's worth playing.
+RoFind is an open-source platform where the community recommends, rates, and discovers games together. No algorithms — just real players sharing what's worth playing.
 
 ## Features
-- 🎮 &nbsp; Browse community-submitted games
-- ⭐ &nbsp; Rate and review games
-- 🔍 &nbsp; Search and filter by genre, author, and popularity
-- 📬 &nbsp; Submit your own game for others to discover
+- 🎮 Browse community-submitted games
+- ⭐ Rate and review games
+- 🔍 Search and filter by genre, author, and popularity
+- 📬 Submit your own game for others to discover
 
 ## Getting Started
 
-### Prerequisites
-- Node.js `v18+`
-- npm or yarn
+**Prerequisites:** Node.js `v18+` and npm
 
-# Navigate to the project
+```bash
+git clone https://github.com/RoFind/RoFind-Site.git
 cd rofind
-
-# Install dependencies
 npm install
-
-# Start the development server
 npm start
 ```
 
 ## Contributing
-RoFind is community-driven — contributions are welcome!
 
 1. Fork the repository
-2. Create a new branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add your feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
+2. Create a branch — `git checkout -b feature/your-feature`
+3. Commit your changes — `git commit -m 'Add your feature'`
+4. Push — `git push origin feature/your-feature`
 5. Open a Pull Request
 
 ## Roadmap
@@ -49,7 +42,7 @@ RoFind is community-driven — contributions are welcome!
 - [ ] Moderation tools
 
 ## License
-MIT — free to use and modify. Redistribution of copies requires prior notice to the original author.
+Free to use and modify. Redistribution requires prior notice to the original author.
 
 ---
 

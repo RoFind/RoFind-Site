@@ -1,5 +1,4 @@
 :root {
-  /* Core */
   --color-bg: rgb(18, 18, 21);
   --color-card: rgb(39, 41, 48);
   --color-text: white;
@@ -10,27 +9,21 @@
   --color-input-button-hover: rgb(48, 50, 59);
   --color-disabled-button: grey;
 
-
-  /* Submission */
   --submission-note-bg: rgb(247, 246, 131);
   --submission-note-border: rgb(255, 204, 0);
   --submission-note-text: rgb(0, 0, 0);
-  /* Original Size = 180 */
-  --image-size: 130px;
 
-  /* ETC */
+  --image-size: 130px;
   --drop-shadow-blur: 3px;
+  --radius: 5px;
+  --outline: 2px solid grey;
 }
 
 nav {
   position: sticky;
   top: 0;
-  background: #191A1F;
-  background: linear-gradient(180deg, rgba(25, 26, 31, 1) 0%, rgba(255, 255, 255, 0) 100%);
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
+  background: linear-gradient(180deg, rgb(25, 26, 31) 0%, rgba(255, 255, 255, 0) 100%);
+  padding: 20px;
   display: grid;
   grid-template-columns: auto auto 1fr max-content;
   gap: 20px;
@@ -39,23 +32,15 @@ nav {
 
 nav>* {
   margin: 0;
-  /* padding: 0; */
 }
 
 footer {
-  bottom: 0;
-  margin: 0;
   margin-top: 50px;
   background-color: rgb(25, 26, 31);
-  padding-top: 30px;
-  padding-bottom: 100px;
-  padding-left: 70px;
-  padding-right: 70px;
+  padding: 30px 70px 100px;
 }
 
 footer>p {
   color: var(--color-muted);
   margin: 0;
 }
-
-/* ETC */

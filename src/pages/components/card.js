@@ -55,13 +55,18 @@ export function createCard({
       </div>
       <p class="card-description">${description}</p>
       <div>
-        <button class="card-play">Play</button>
+        <!-- <button class="card-play">Play</button> -->
       </div>
     </div>
   `;
 
-  card.querySelector('.card-play').addEventListener('click', () => {
-    window.electronAPI.openRoblox(placeId);
+  // card.querySelector('.card-play').addEventListener('click', () => {
+  //   window.electronAPI.openRoblox(placeId);
+  // });
+  // Card click
+  card.addEventListener('click', () => {
+    var thing = window.document.getElementById('view_game')
+    thing.style.display = "block"
   });
 
   return card;
