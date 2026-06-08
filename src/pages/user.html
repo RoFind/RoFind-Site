@@ -3,12 +3,17 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>RoFind</title>
-  <link rel="stylesheet" href="../styles/global.css" />
-  <link rel="stylesheet" href="../styles/inputs.css" />
-  <link rel="stylesheet" href="../styles/index.css" />
+  <title>RoFind — User</title>
+  <link rel="stylesheet" href="../styles/global.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/popup.css">
+  <link rel="stylesheet" href="../styles/inputs.css">
+  <link rel="stylesheet" href="../styles/card.css">
+  <link rel="stylesheet" href="../styles/user.css">
 
-  <!-- FONT -->
+  <script type="module" src="../core/scripts/submissionForm.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
@@ -20,45 +25,22 @@
     <h1 class="g">IN DEVELOPMENT</h1>
     <div></div>
     <input class="game_submission" type="button" value="Submit Game" />
+    <a class="user" type="button" href="./user.html">User</a>
   </nav>
 
-  <!-- Pop up -->
-  <div class="popup" style="display: none">
-    <form onsubmit="return false;" class="submission-form">
-      <h3>Game Submission</h3>
+  <div id="user-container">
 
-      <div class="game_submission_note">
-        <p>Your game submission will be reviewed before being displayed in public once submitted.</p>
+    <!-- STill working on this iashfue -->
+    <div id="user-profile">
+      <img id="user-avatar" src="https://placehold.co/100?text=..." alt="Avatar" />
+      <div id="user-info">
+        <h2 id="user-display-name">—</h2>
+        <p id="user-username">@—</p>
+        <input type="button" id="sign-out-btn" class="submission_button" value="Sign Out" />
       </div>
+    </div>
 
-      <div>
-        <img id="submissions_game_preview" src="https://placehold.co/150?text=Game+Icon" alt="Game Icon" />
-        <p id="submissions_game_name"></p>
-      </div>
-
-      <div>
-        <label>Place ID:</label>
-
-        <input type="number" class="submission_placeId" min="1" />
-        <input id="checkplace" type="button" class="submission_button" value="Check" />
-
-        <p>
-          User:
-          <input type="button" id="sign_in_roblox" class="sumissions_user submission_button" value="Sign in Roblox" />
-        </p>
-      </div>
-
-      <div style="display: flex; justify-content: space-evenly;">
-        <input id="game_submission_cancel" type="button" value="Cancel">
-        <input id="game_submission_submit" type="button" value="Submit" />
-      </div>
-
-
-    </form>
   </div>
-
-  <!-- Container -->
-  <div id="card-container"></div>
 
   <footer>
     <p>
@@ -73,129 +55,29 @@
     </p>
   </footer>
 
-  <!-- CARDS -->
-
   <script type="module">
-    import { createCard } from './components/card.js';
-    async function getUniverseId(placeId) {
+    const userId = localStorage.getItem('roblox_user_id');
+
+    if (!userId) {
+      document.getElementById('user-display-name').textContent = 'Not signed in';
+      document.getElementById('user-username').textContent = '';
+    } else {
       try {
-        const res = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
-        if (!res.ok) throw new Error(`Failed to get universeId for placeId ${placeId}`);
-        const data = await res.json();
-        return data.universeId;
-      } catch {
-        return;
-      }
+        const [userRes, avatarRes] = await Promise.all([
+          fetch(`https://users.roblox.com/v1/users/${userId}`),
+          fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png`)
+        ]);
 
-    }
+        const userData = await userRes.json();
+        const avatarData = await avatarRes.json();
 
-    async function fetchGameDetails(universeId) {
-      const res = await fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
-      if (!res.ok) throw new Error(`Failed to get game data for universeId ${universeId}`);
-      const data = await res.json();
-      return data.data[0];
-    }
-
-    async function fetchThumbnail(universeId) {
-      const res = await fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png&type=Circle`);
-      const data = await res.json();
-      return data.data[0]?.imageUrl || '';
-    }
-
-    const cardContainer = document.getElementById('card-container');
-
-    const renderCards = async () => {
-      const placeIds = await window.firebaseAPI.getGamePlaceIds(); // from preload (Firestore)
-
-      for (const placeId of placeIds) {
-        try {
-          const universeId = await getUniverseId(placeId);
-          // console.log(`${placeId} Universe ${universeId}`);
-
-          const gameData = await fetchGameDetails(universeId);
-          const imageUrl = await fetchThumbnail(universeId);
-
-          let authorName = null;
-          let badge = document.querySelector("#verifiedBadge")
-          if (gameData.creator?.type == 'User') {
-            authorName = "@" + gameData.creator?.name
-          } else {
-            authorName = gameData.creator?.name
-          }
-
-          const card = createCard({
-            name: gameData.name,
-            description: gameData.description,
-            placeId,
-            imageUrl,
-            author: authorName || 'Unknown',
-            starIcon: "../images/star.svg",
-            verifiedIcon: "../images/verifieduser.png",
-            verified: gameData.creator?.hasVerifiedBadge ?? false
-          });
-
-
-          cardContainer.appendChild(card);
-        } catch (err) {
-          console.error(`Failed to load game for placeId ${placeId}:`, err);
-        }
-      }
-    };
-    renderCards();
-
-    const popup = document.querySelector(".popup")
-    const submission_form = popup.querySelector(".submission-form");
-    const submission_icon_preview = submission_form.querySelector("#submissions_game_preview")
-    const submission_game_name = submission_form.querySelector("#submissions_game_name")
-    const placeid = submission_form.querySelector("input[type='number']");
-    const checkplace = submission_form.querySelector("#checkplace");
-
-    const verify_user = submission_form.querySelector("#sign_in_roblox")
-
-    const open_popup = document.querySelector(".game_submission")
-    const submit_btn = submission_form.querySelector("#game_submission_submit");
-    const cancel_btn = submission_form.querySelector("#game_submission_cancel");
-
-    checkplace.addEventListener("click", async (e) => {
-      e.preventDefault();
-      try {
-        const place = await getUniverseId(placeid.value);
-        const gameDetails = await fetchGameDetails(place);
-
-        submission_icon_preview.src = await fetchThumbnail(place)
-        submission_game_name.innerHTML = gameDetails.name;
-
-        place.style.removeProperty('border-color')
-
-        checkplace.disabled = true;
-        checkplace.style.color = "grey";
+        document.getElementById('user-display-name').textContent = userData.displayName;
+        document.getElementById('user-username').textContent = '@' + userData.name;
+        document.getElementById('user-avatar').src = avatarData.data[0]?.imageUrl || '';
       } catch (err) {
-        console.error("Game Submission Error ->", placeid.value, err);
-        placeid.style = "border-color: red;"
-        return;
+        console.error('Failed to load user data:', err);
       }
-    });
-
-    open_popup.addEventListener("click", () => {
-      popup.style.display = "block";
-    })
-
-    verify_user.addEventListener("click", async () => {
-      
-    })
-
-    submit_btn.addEventListener("click", () => {
-      console.log("Sumission");
-    })
-
-    cancel_btn.addEventListener("click", () => {
-      submission_icon_preview.src = "https://placehold.co/150?text=Game+Icon"
-      submission_game_name.innerHTML = ""
-      placeid.value = "";
-      checkplace.disabled = false
-      checkplace.style.color = "white"
-      popup.style.display = "none";
-    })
+    }
   </script>
 </body>
 

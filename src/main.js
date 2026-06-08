@@ -30,7 +30,7 @@ function mainWindow() {
 
   win.loadFile(path.join(__dirname, 'pages', 'index.html'));
 
-  win.setMenuBarVisibility(false)
+  win.setMenuBarVisibility(true)
 }
 
 app.whenReady().then(() => {
@@ -57,6 +57,7 @@ if (!isDev) {
   win.webContents.on('before-input-event', (event, input) => {
     if (input.key === 'F12' || (input.control && input.shift && input.key === 'I')) {
       event.preventDefault();
+      win.setMenuBarVisibility(false)
     }
   });
 }

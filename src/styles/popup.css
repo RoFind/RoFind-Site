@@ -1,5 +1,9 @@
 @layer popup;
 
+:root {
+    --popup-padding: 50px;
+}
+
 @layer popup {
     .popup {
         position: fixed;
@@ -11,7 +15,7 @@
         display: grid;
         place-items: center;
         z-index: 999;
-        padding: 50px;
+        padding: var(--popup-padding);
         box-sizing: border-box;
     }
 
@@ -85,5 +89,18 @@
         color: var(--color-text);
         padding: 10px 30px;
         cursor: pointer;
+    }
+
+    /* Game View Ppopup */
+
+    .view_container {
+        background-color: var(--color-card);
+        padding: var(--popup-padding);
+        width: 50%;
+        color: white;
+    }
+
+    .view_container>#game_thumbnail {
+        width: 50px;
     }
 }

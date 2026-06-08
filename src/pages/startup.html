@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>RoFind — User</title>
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/base.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/popup.css">
+    <link rel="stylesheet" href="../styles/inputs.css">
+    <link rel="stylesheet" href="../styles/card.css">
+    <link rel="stylesheet" href="../styles/startup.css">
+
+    <script type="module" src="../core/scripts/submissionForm.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <nav>
+        <h1 class="appname">RoFind</h1>
+        <h1 class="g">IN DEVELOPMENT</h1>
+        <div></div>
+    </nav>
+
+    <div id="user-container">
+        <img src="../images/Cropped_FullColor_White.png">
+
+        <!-- Login Card -->
+        <div id="login-card">
+            <h2>Sign in to RoFind</h2>
+            <p>Connect your Roblox account to submit games, rate, and more.</p>
+            <input type="button" id="sign-in-btn" class="submission_button" value="Sign in with Roblox" />
+            <!-- <p id="guest-hint">Just browsing? <a href="./index.html" id="guest-link">Continue as Guest</a></p> -->
+        </div>
+
+        <!-- Guest Banner -->
+        <div id="guest-banner">
+            <p>Browse as <strong>Guest</strong> — sign in to submit games and rate.</p>
+            <input type="button" id="continue-guest" class="submission_button" value="Continue as Guest" />
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            RoFind is a community-driven alternative to the native Roblox
+            discovery page, helping users find games through shared support
+            and recommendations.
+        </p>
+        <p>
+            <strong>ROBLOX®</strong> is a registered trademark of Roblox
+            Corporation. All rights and trademarks are the property of their
+            respective owners.
+        </p>
+    </footer>
+
+    <script type="module">
+        const userId = localStorage.getItem('roblox_user_id');
+
+        const loginCard = document.getElementById('login-card');
+        const userProfile = document.getElementById('user-profile');
+        const guestBanner = document.getElementById('guest-banner');
+
+        if (!userId) {
+            loginCard.style.display = 'block';
+        } else {
+            try {
+                const [userRes, avatarRes] = await Promise.all([
+                    fetch(`https://users.roblox.com/v1/users/${userId}`),
+                    fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png`)
+                ]);
+
+                const userData = await userRes.json();
+                const avatarData = await avatarRes.json();
+
+                document.getElementById('user-display-name').textContent = userData.displayName;
+                document.getElementById('user-username').textContent = '@' + userData.name;
+                document.getElementById('user-avatar').src = avatarData.data[0]?.imageUrl || '';
+
+                userProfile.style.display = 'flex';
+            } catch (err) {
+                console.error('Failed to load user:', err);
+                loginCard.style.display = 'block';
+            }
+        }
+
+        document.getElementById('sign-in-btn').addEventListener('click', () => {
+            // TODO: Roblox OAuth
+            console.log('OAuth sign in');
+        });
+
+        document.getElementById('continue-guest')?.addEventListener('click', () => {
+            window.location.href = './index.html';
+        });
+
+        document.getElementById('guest-link')?.addEventListener('click', () => {
+            window.location.href = './index.html';
+        });
+
+        document.getElementById('sign-out-btn')?.addEventListener('click', () => {
+            localStorage.removeItem('roblox_user_id');
+            window.location.reload();
+        });
+    </script>
+</body>
+
+</html>

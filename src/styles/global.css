@@ -1,3 +1,5 @@
+@layer userPage, popup;
+
 :root {
   --color-bg: rgb(18, 18, 21);
   --color-card: rgb(39, 41, 48);
@@ -35,6 +37,7 @@ nav>* {
 }
 
 footer {
+  bottom: 0;
   margin-top: 50px;
   background-color: rgb(25, 26, 31);
   padding: 30px 70px 100px;

@@ -6,6 +6,7 @@ body {
     -webkit-user-drag: none;
     -moz-user-select: none;
     scroll-behavior: smooth;
+    height: 100vh;
 }
 
 img {
@@ -33,6 +34,7 @@ input[type="button"] {
 }
 
 input[type="number"] {
+    appearance: textfield;
     -moz-appearance: textfield;
 }
 

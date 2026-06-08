@@ -28,12 +28,38 @@ input {
 
 }
 
-input[type=button] {
+.game_submission {
+  border-radius: var(--radius);
+  font-size: 20px;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  background-color: var(--color-accent);
+  color: var(--color-text);
+  font-family: "Outfit", sans-serif;
+  transition: transform 0.2s ease-in-out;
   cursor: pointer;
-  padding: 2px 12px 2px 12px;
 }
 
-/* Pseudo */
+.game_submission:hover {
+  transform: scale(1.1);
+}
+
+input[type="button"] {
+  cursor: pointer;
+  padding: 10px 24px;
+}
+
 input[type=button].submission_button:hover {
   background-color: var(--color-input-button-hover);
+}
+
+input[type="button"]+#game_submission_submit {
+  background-color: var(--color-accent);
+}
+
+input[type="number"].submission_placeId {
+  height: 38px;
+  box-sizing: border-box;
+  padding: 0 10px;
 }

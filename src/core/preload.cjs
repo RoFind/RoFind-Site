@@ -1,8 +1,9 @@
-// preload.cjs
-
 const { contextBridge, shell } = require('electron');
 const path = require('path');
-const fs = require('fs');
+const https = require('https');
+const { mkdirSync, existsSync, createWriteStream, unlinkSync } = require('fs');
+const Database = require('better-sqlite3');
+
 const dotenvPath = path.resolve(process.cwd(), '.env');
 require('dotenv').config({ path: dotenvPath });
 
@@ -10,7 +11,7 @@ var webFrame = require('electron').webFrame;
 webFrame.setVisualZoomLevelLimits(1, 1);
 
 const { initializeApp, getApps } = require('firebase/app');
-const { getFirestore, collection, getDocs, addDoc } = require('firebase/firestore');
+const { getFirestore, collection, getDocs, addDoc, deleteDoc, query, where } = require('firebase/firestore');
 
 const firebaseConfig = {
   apiKey: process.env.CORE_CIREBASE_API_KEY,
@@ -21,67 +22,69 @@ const firebaseConfig = {
   appId: process.env.CORE_FIREBASE_APP_ID
 };
 
-let db;
+let firestore;
 if (!getApps().length) {
   const app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
+  firestore = getFirestore(app);
 }
 
-// Caching
-const CACHE_FILE = path.join(__dirname, '../cache/', 'game-cache.json');
-const TTL_MS = 1000 * 60 * 60; // 1 hour
+// Paths
+const IMAGE_DIR = path.join(__dirname, '../cache/images');
+const DB_PATH = path.join(__dirname, '../cache/rofind.db');
 
-function loadCache() {
-  try {
-    const raw = fs.readFileSync(CACHE_FILE, 'utf-8');
-    return JSON.parse(raw);
-  } catch {
-    return {};
-  }
+mkdirSync(IMAGE_DIR, { recursive: true });
+mkdirSync(path.dirname(DB_PATH), { recursive: true });
+
+// SQLite
+const sqlite = new Database(DB_PATH);
+
+sqlite.exec(`
+  CREATE TABLE IF NOT EXISTS games (
+    placeId     TEXT PRIMARY KEY,
+    universeId  TEXT,
+    name        TEXT,
+    description TEXT,
+    author      TEXT,
+    verified    INTEGER,
+    rating      REAL,
+    imagePath   TEXT,
+    fetchedAt   INTEGER
+  );
+`);
+
+const TTL_MS = 1000 * 60 * 60;
+
+function isExpired(fetchedAt) {
+  return Date.now() - fetchedAt > TTL_MS;
 }
 
-function saveCache(cache) {
-  fs.writeFileSync(CACHE_FILE, JSON.stringify(cache));
+// Images
+function downloadImage(url, universeId) {
+  return new Promise((resolve, reject) => {
+    const dest = path.join(IMAGE_DIR, `thumb_${universeId}.jpg`);
+    if (existsSync(dest)) return resolve(dest);
+    const file = createWriteStream(dest);
+    https.get(url, (res) => {
+      res.pipe(file);
+      file.on('finish', () => { file.close(); resolve(dest); });
+    }).on('error', reject);
+  });
 }
-
-let gameCache = loadCache();
 
 // Firebase
 async function getGamePlaceIds() {
-  const cached = gameCache['placeIds'];
-  if (cached && Date.now() - cached.fetchedAt < TTL_MS) {
-    return cached.data;
-  }
-
-  const snapshot = await getDocs(collection(db, 'games'));
-  const data = snapshot.docs.map(doc => doc.data().placeId);
-
-  gameCache['placeIds'] = { data, fetchedAt: Date.now() };
-  saveCache(gameCache);
-  return data;
+  const snapshot = await getDocs(collection(firestore, 'games'));
+  return snapshot.docs.map(doc => doc.data().placeId);
 }
 
 async function getGameDetails(placeId) {
-  const cached = gameCache[placeId];
-  if (cached && Date.now() - cached.fetchedAt < TTL_MS) {
-    return cached.data;
-  }
-
-  const snapshot = await getDocs(collection(db, 'games'));
+  const snapshot = await getDocs(collection(firestore, 'games'));
   const doc = snapshot.docs.find(d => d.data().placeId === placeId);
-  const data = doc ? doc.data() : null;
-
-  if (data) {
-    gameCache[placeId] = { data, fetchedAt: Date.now() };
-    saveCache(gameCache);
-  }
-
-  return data;
+  return doc ? doc.data() : null;
 }
 
-// Submission Template
 async function submitGame({ name, description, placeId, author }) {
-  await addDoc(collection(db, 'submissions'), {
+  await addDoc(collection(firestore, 'submissions'), {
     name,
     description,
     placeId,
@@ -91,15 +94,60 @@ async function submitGame({ name, description, placeId, author }) {
   });
 }
 
+async function deleteGame(placeId) {
+  const q = query(collection(firestore, 'games'), where('placeId', '==', placeId));
+  const snapshot = await getDocs(q);
+  snapshot.docs.forEach(doc => deleteDoc(doc.ref));
+}
+
 // Expose
 contextBridge.exposeInMainWorld('firebaseAPI', {
   getGamePlaceIds,
   getGameDetails,
   submitGame,
+  deleteGame,
+});
+
+contextBridge.exposeInMainWorld('cacheDB', {
+  getGame: (placeId) => {
+    const row = sqlite.prepare('SELECT * FROM games WHERE placeId = ?').get(placeId);
+    if (!row || isExpired(row.fetchedAt)) return null;
+    console.log(`[DB CACHE HIT] placeId: ${placeId}`);
+    return row;
+  },
+
+  saveGame: async (game, imageUrl) => {
+    const imagePath = await downloadImage(imageUrl, game.universeId);
+    sqlite.prepare(`
+      INSERT INTO games (placeId, universeId, name, description, author, verified, rating, imagePath, fetchedAt)
+      VALUES (@placeId, @universeId, @name, @description, @author, @verified, @rating, @imagePath, @fetchedAt)
+      ON CONFLICT(placeId) DO UPDATE SET
+        universeId  = @universeId,
+        name        = @name,
+        description = @description,
+        author      = @author,
+        verified    = @verified,
+        rating      = @rating,
+        imagePath   = @imagePath,
+        fetchedAt   = @fetchedAt
+    `).run({ ...game, imagePath, fetchedAt: Date.now() });
+  },
+
+  deleteGame: (placeId) => {
+    const row = sqlite.prepare('SELECT imagePath FROM games WHERE placeId = ?').get(placeId);
+    if (row?.imagePath && existsSync(row.imagePath)) unlinkSync(row.imagePath);
+    sqlite.prepare('DELETE FROM games WHERE placeId = ?').run(placeId);
+  },
+
+  getAllPlaceIds: () => {
+    return sqlite.prepare('SELECT placeId FROM games').all().map(r => r.placeId);
+  }
+});
+
+contextBridge.exposeInMainWorld('imageAPI', {
+  download: (url, universeId) => downloadImage(url, universeId),
 });
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  openRoblox: (placeId) => {
-    shell.openExternal(`roblox://placeId=${placeId}`);
-  }
+  openRoblox: (placeId) => shell.openExternal(`roblox://placeId=${placeId}`)
 });

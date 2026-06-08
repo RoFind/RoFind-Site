@@ -1,0 +1,48 @@
+@import url("./global.css");
+@import url("./main.css");
+@import url("./base.css");
+
+
+@layer userPage {
+    #user-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 24px;
+    }
+
+    #user-profile {
+        background-color: var(--color-card);
+        border-radius: var(--radius);
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    #user-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    #user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    #user-display-name {
+        font-size: 22px;
+        font-weight: 600;
+        margin: 0;
+        color: var(--color-text);
+    }
+
+    #user-username {
+        color: var(--color-muted);
+        font-size: 14px;
+        margin: 0;
+    }
+}

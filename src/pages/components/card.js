@@ -64,9 +64,13 @@ export function createCard({
   //   window.electronAPI.openRoblox(placeId);
   // });
   // Card click
+
   card.addEventListener('click', () => {
-    var thing = window.document.getElementById('view_game')
-    thing.style.display = "block"
+    var view_gameElement = window.document.getElementById('view_game')
+    view_gameElement.querySelector("#game_thumbnail").src = imageUrl
+    view_gameElement.querySelector("#game_title").innerHTML = name
+    view_gameElement.querySelector("#author_link").innerHTML = author
+    view_gameElement.style.display = "block"
   });
 
   return card;

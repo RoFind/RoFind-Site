@@ -88,6 +88,7 @@ img {
   line-height: 1.5;
   overflow: hidden;
   display: -webkit-box;
+  line-clamp: 4;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   /* flex: 1; */
@@ -153,22 +154,6 @@ img {
   padding: 24px;
   max-width: 1500px;
   margin: 0 auto;
-}
-
-.game_submission {
-  border-radius: 5px;
-  font-size: 20px;
-  box-sizing: border-box;
-  outline: none;
-  border: none;
-  background-color: var(--color-accent);
-  color: white;
-  font-family: "Outfit";
-  transition: transform 0.2s ease-in-out;
-}
-
-.game_submission:hover {
-  transform: scale(1.1);
 }
 
 form>h3 {
