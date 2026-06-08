@@ -11,13 +11,14 @@ body {
 }
 
 img {
-  user-drag: none;
+  /* user-drag: none; */
   -webkit-user-drag: none;
+  user-select: none;
   -moz-user-select: none;
   border: none;
   outline: none;
   display: block;
-  vertical-align: middle;
+  /* vertical-align: middle; */
 }
 
 .appname {
@@ -51,16 +52,19 @@ img {
 }
 
 .card-img {
-  width: var(--image-size);
-  height: var(--image-size);
+  /* width: clamp(100px, 40%, 180px); */
+  width: 100%;
+  margin: auto;
+  max-width: 200px;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 5px;
+  flex-shrink: 0;
   user-select: none;
   pointer-events: none;
   border: none;
   outline: none;
   box-shadow: none;
-  object-fit: cover;
   display: block;
 }
 
@@ -71,10 +75,16 @@ img {
 
 .star-rating {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   /* change to column if vertical */
   align-items: center;
   gap: 4px;
+}
+
+@media (max-width: 940px) {
+  .star-rating {
+    flex-direction: row;
+  }
 }
 
 .star-label {

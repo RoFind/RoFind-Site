@@ -62,18 +62,24 @@ if (!isDev) {
 }
 
 // Session Secuityr
-session
-  .defaultSession
-  .setPermissionRequestHandler((webContents, permission, callback) => {
-    const parsedUrl = new URL(webContents.getURL());
+// idk what does do ngl
+try {
+  if (session?.defaultSession) {
+    session.defaultSession
+      .setPermissionRequestHandler((webContents, permission, callback) => {
+        const parsedUrl = new URL(webContents.getURL());
 
-    if (['notifications', 'camera', 'location', 'microphone'].includes(permission)) {
-      return callback(false);
-    }
+        if (['notifications', 'media', 'location'].includes(permission)) {
+          return callback(false);
+        }
 
-    if (parsedUrl.protocol !== 'https:') {
-      return callback(false);
-    }
+        if (parsedUrl.protocol !== 'https:') {
+          return callback(false);
+        }
 
-    callback(true);
-  });
+        callback(true);
+      });
+  }
+} catch (error) {
+  console.error("Error:", error)
+}

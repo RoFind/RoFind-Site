@@ -15,7 +15,8 @@
   --submission-note-bg: rgb(247, 246, 131);
   --submission-note-border: rgb(255, 204, 0);
   --submission-note-text: rgb(0, 0, 0);
-  --image-size: 180px;
+  /* Original Size = 180 */
+  --image-size: 130px;
 
   /* ETC */
   --drop-shadow-blur: 3px;
