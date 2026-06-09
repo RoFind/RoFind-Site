@@ -11,18 +11,22 @@
 ![Main](./src/images/Preview/Main.png)
 
 
-## Overview
-RoFind is an open-source platform where the community recommends, rates, and discovers games together. No algorithms — just real players sharing what's worth playing.
+## What is RoFind?
+RoFind is an open-source platform where players recommend, rate, and discover games together. No fancy algorithms or sponsored listings — just people sharing what's actually worth playing.
 
-## Features
-- 🎮 Browse community-submitted games
-- ⭐ Rate and review games
-- 🔍 Search and filter by genre, author, and popularity
-- 📬 Submit your own game for others to discover
+## Demo
+A live demo isn't up yet (I'm working on it). You can peek at the UI previews above, or clone it locally to see where things are heading.
+
+## (_Planned_) Features
+- 🎮 Browse games submitted by the community
+- ⭐ Rate and leave reviews
+- 🔍 Filter by genre, author, or popularity
+- 📬 Submit your own game for others to find
+- 👤 Login to save your reviews and rating
 
 ## Getting Started
 
-**Prerequisites:** Node.js `v18+` and npm
+You'll need Node.js `v18+` and npm installed.
 
 ```bash
 git clone https://github.com/RoFind/RoFind-Site.git
@@ -33,21 +37,24 @@ npm start
 
 ## Contributing
 
-1. Fork the repository
-2. Create a branch — `git checkout -b feature/your-feature`
-3. Commit your changes — `git commit -m 'Add your feature'`
+Got an idea or found a bug? Contributions are welcome!
+
+1. Fork the repo
+2. Create your branch — `git checkout -b feature/your-feature`
+3. Commit — `git commit -m 'Add your feature'`
 4. Push — `git push origin feature/your-feature`
 5. Open a Pull Request
 
 ## Roadmap
 - [ ] Game submission system
+  - Im having trouble here pls chill
 - [ ] User profiles
 - [ ] Rating & review system
 - [ ] Search & filtering
 - [ ] Moderation tools
 
 ## License
-Free to use and modify. Redistribution requires prior notice to the original author.
+Free to use and modify. Just give me a heads up before redistributing.
 
 ---
 
