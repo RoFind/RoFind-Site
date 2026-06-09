@@ -42,7 +42,7 @@ npm start
 
 ## Contributing
 
-Got an idea or found a bug? Contributions are welcome!
+Got an idea or found a bug? Contributions are welcome! (I'm still new with JS and stuff so a contribution will be really appreciated :D)
 
 1. Fork the repo
 2. Create your branch — `git checkout -b feature/FeatureName`
