@@ -1,5 +1,7 @@
 const updateOnlineStatus = () => {
-  document.getElementById('status').innerHTML = navigator.onLine ? 'online' : 'offline'
+  var status = document.getElementById('status')?.innerHTML = navigator.onLine ? 'online' : 'offline'
+  status.innerHTML = navigator.onLine ? 'online' : 'offline'
+
 }
 
 window.addEventListener('online', updateOnlineStatus)
