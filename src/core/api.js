@@ -34,6 +34,7 @@ function getCached(key, fetchFn) {
 }
 
 export async function getUniverseId(placeId) {
+    console.log(placeId)
     return getCached(`universe_${placeId}`, async () => {
         const res = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
         if (!res.ok) throw new Error(`Failed to get universeId for placeId ${placeId}`);
@@ -45,6 +46,7 @@ export async function getUniverseId(placeId) {
 }
 
 export async function fetchGameDetails(universeId) {
+    console.log(universeId)
     return getCached(`details_${universeId}`, async () => {
         const res = await fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
         if (!res.ok) throw new Error(`Failed to get game data for universeId ${universeId}`);
@@ -55,6 +57,7 @@ export async function fetchGameDetails(universeId) {
 
 export async function fetchThumbnail(universeId) {
     var idToInt = parseInt(universeId)
+    console.log(idToInt)
     return getCached(`thumb_${idToInt}`, async () => {
         const res = await fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${idToInt}&size=512x512&format=Png&type=Circle`);
         const data = await res.json();

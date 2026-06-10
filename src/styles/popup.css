@@ -1,17 +1,13 @@
 @layer popup;
 
-:root {
-    --popup-padding: 50px;
-}
-
 @layer popup {
     .popup {
         position: fixed;
+        background-color: rgba(0, 0, 0, 0.45);
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        background-color: rgba(0, 0, 0, 0.5);
         display: grid;
         place-items: center;
         z-index: 999;
@@ -19,134 +15,232 @@
         box-sizing: border-box;
     }
 
-    .popup>form {
-        color: var(--color-text);
+    #popup_holder {
+        display: flex;
+        flex-direction: column;
+        gap: 10px
+    }
+
+    #closebuttonholder {
+        display: grid;
+        grid-template-columns: 1fr auto;
+    }
+
+    .popup-modal {
         background-color: var(--color-card);
-        padding: 20px;
-        border-radius: 10px;
-        filter: drop-shadow(0px 0px var(--drop-shadow-blur) black);
-        max-width: 350px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
+        max-width: 360px;
         width: 100%;
     }
 
-    form>h3 {
-        margin: 0;
+    .popup-header {
+        height: 48px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #4b4b4b4b;
     }
 
-    form>div {
-        margin-top: 15px;
-        text-align: center;
-        justify-items: center;
+    .popup-header span {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--color-text);
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
     }
 
-    form>div>img {
+    .popup-close:hover {
+        color: var(--color-text);
+    }
+
+    .popup-body {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .submission-note {
+        background-color: rgba(0, 162, 255, 0.08);
+        border-left: 3px solid var(--color-accent);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        padding: 8px 12px;
+        font-size: 12px;
+        color: var(--color-muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .submission-preview {
+        border: 1px solid var(--border-color);
         border-radius: var(--radius);
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
     }
 
     #submissions_game_preview {
-        width: 150px;
-    }
-
-    .game_submission {
+        width: 48px;
+        height: 48px;
         border-radius: var(--radius);
-        font-size: 20px;
-        box-sizing: border-box;
-        outline: none;
-        border: none;
-        background-color: var(--color-accent);
-        color: white;
-        font-family: "Outfit";
-        transition: transform 0.2s ease-in-out;
+        object-fit: cover;
     }
 
-    .game_submission_note {
-        background-color: var(--submission-note-bg);
-        padding: 0 20px;
-        border-radius: var(--radius);
-        border: 3px solid var(--submission-note-border);
-        color: var(--color-muted);
-        font-size: 12px;
-    }
-
-    .game_submission_note>p {
+    #submissions_game_name {
+        font-size: 13px;
+        font-weight: 600;
+        max-width: 240px;
+        color: var(--color-text);
         margin: 0;
     }
 
-    #game_submission_submit {
-        background-color: var(--color-accent);
-        color: var(--color-text);
-        outline: none;
-        border: none;
-        padding: 10px 30px;
-        cursor: pointer;
+    #submissions_game_author {
+        font-size: 11px;
+        margin: 4px 0 0;
+    }
+
+    #author_link {
+        color: var(--color-muted);
+        text-decoration: none;
+    }
+
+    .submission-field label {
+        display: block;
+        font-size: 11px;
+        color: var(--color-muted);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+
+    .submission-row {
+        display: flex;
+        gap: 8px;
+    }
+
+    .submission_placeId {
+        flex: 1;
+        height: 34px;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+
+    .submissions_user {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+        height: 36px;
+    }
+
+    .submission-actions {
+        display: flex;
+        gap: 8px;
+        padding-top: 15px;
+        border-top: 1px solid var(--border-color);
+        margin-top: 2px;
     }
 
     #game_submission_cancel {
-        color: var(--color-text);
-        padding: 10px 30px;
-        cursor: pointer;
+        flex: 1;
+        height: 36px;
     }
 
-    /* Game View Ppopup */
-
-    .view_container {
-        background-color: var(--color-card);
-        padding: var(--popup-padding);
-        width: 50%;
-        color: white;
+    #game_submission_submit {
+        flex: 2;
+        height: 36px;
+        font-weight: 600;
     }
 
-    .view_container>#game_thumbnail {
-        width: 50px;
-    }
-
-
-
-
-
-
-
+    /* Game view popup */
     .view_container {
         background-color: var(--color-card);
         padding: var(--popup-padding);
         width: min(700px, 90vw);
-        border-radius: 12px;
-
+        border-radius: 8px;
+        border: 1px solid #2e2e4a;
         display: grid;
         grid-template-columns: 160px 1fr;
         gap: 20px;
-
         color: var(--color-text);
         position: relative;
         box-sizing: border-box;
     }
 
-    /* thumbnail */
     #game_thumbnail {
         width: 160px;
-        height: 160px;
+        height: 100%;
         object-fit: cover;
-        border-radius: 10px;
+        border-radius: var(--radius);
     }
 
-    /* text section */
     #leftside {
         display: flex;
         flex-direction: column;
         gap: 10px;
     }
 
-    /* close button (if inside container) */
+    #game_title {
+        margin: 0;
+    }
+
+    #game_author {
+        margin: 0;
+    }
+
+    #game_description {
+        height: 1fr
+    }
+
+    #play_count {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px
+    }
+
+    #star_rating {
+        width: fit-content;
+    }
+
     .view_container .normal_button {
         position: absolute;
         top: 10px;
         right: 10px;
     }
 
-    /* responsive fallback */
+    .view_actions {
+        display: grid;
+        grid-template-columns: 50px 1fr;
+        gap: 8px;
+        padding-top: 15px;
+        border-top: 1px solid var(--border-color);
+        margin-top: 2px;
+        height: 50px
+    }
+
     @media (max-width: 600px) {
+        #view_game {
+            padding: 20px;
+            /* gap: 0px */
+        }
+
+        #popup_holder {
+            gap: 10px;
+            scale: 0.75;
+        }
+
+        #closebuttonholder>button {
+            width: 80px;
+            font-size: 16px;
+        }
+
         .view_container {
             grid-template-columns: 1fr;
+            /* scale: 0.9; */
         }
 
         #game_thumbnail {

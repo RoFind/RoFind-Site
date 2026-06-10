@@ -1,19 +1,14 @@
 @import url("./global.css");
 
-:root {
-  --radius: 5px;
-  --outline: 2px solid grey;
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 input {
@@ -22,56 +17,54 @@ input {
   padding: 3px;
   border: var(--outline);
   outline: none;
-  -moz-user-focus: none;
   background-color: var(--color-input-fields);
-  transition: background-color .2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
+}
+
+input[type="button"] {
+  cursor: pointer;
+  padding: 2px 12px;
+  border: none;
+  border-radius: var(--radius);
+  outline: none;
+}
+
+input[type="number"].submission_placeId {
+  height: 25px;
+  padding: 0 10px;
+}
+
+.btn {
+  font-family: "Outfit", sans-serif;
+  box-sizing: border-box;
+  border-radius: var(--radius);
+  cursor: pointer;
+  outline: none;
+  border: none;
+  transition: transform 0.2s ease-in-out;
 }
 
 .normal_button {
   color: var(--color-bg);
   background-color: var(--button-color-normal);
+}
 
-  font-size: 20px;
-  box-sizing: border-box;
-  font-family: "Outfit", sans-serif;
-  transition: transform 0.2s ease-in-out;
-  cursor: pointer;
+.nofill_button {
+  color: var(--color-text);
+  background-color: transparent;
+  border: 2px solid white;
 }
 
 .game_submission {
-  border-radius: var(--radius);
-  font-size: 20px;
-  box-sizing: border-box;
-  outline: none;
-  border: none;
   background-color: var(--color-accent);
   color: var(--color-text);
   font-family: "Outfit", sans-serif;
-  /* transition: transform 0.2s ease-in-out; */
-  cursor: pointer;
-}
-
-/* .game_submission:hover {
-  transform: scale(1.1);
-} */
-
-input[type="button"] {
-  cursor: pointer;
-  padding: 10px 24px;
+  border-radius: var(--radius);
   outline: none;
   border: none;
 }
 
-input[type=button].submission_button:hover {
-  background-color: var(--color-input-button-hover);
-}
-
-input[type="button"]+#game_submission_submit {
-  background-color: var(--color-accent);
-}
-
-input[type="number"].submission_placeId {
-  height: 38px;
-  box-sizing: border-box;
-  padding: 0 10px;
+.submission_button.checked {
+  color: var(--color-muted);
+  cursor: not-allowed;
 }

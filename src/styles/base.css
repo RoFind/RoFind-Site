@@ -1,16 +1,11 @@
 body {
     margin: 0;
-    background-color: rgb(18, 18, 21);
+    background-color: var(--color-bg);
     font-family: "Outfit", sans-serif;
     user-select: none;
     -webkit-user-drag: none;
     -moz-user-select: none;
     scroll-behavior: smooth;
-    height: 100vh;
-}
-
-nav {
-    z-index: 999;
 }
 
 img {
@@ -22,32 +17,6 @@ img {
     display: block;
 }
 
-input {
-    color: var(--color-text);
-    border-radius: var(--radius);
-    padding: 3px;
-    border: var(--outline);
-    outline: none;
-    background-color: var(--color-input-fields);
-    transition: background-color 0.2s ease-in-out;
-}
-
-input[type="button"] {
-    cursor: pointer;
-    padding: 2px 12px;
-}
-
-input[type="number"] {
-    appearance: textfield;
-    -moz-appearance: textfield;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="button"].submission_button:hover {
-    background-color: var(--color-input-button-hover);
+nav {
+    z-index: 999;
 }

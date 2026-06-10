@@ -18,10 +18,15 @@
   --submission-note-border: rgb(255, 204, 0);
   --submission-note-text: rgb(0, 0, 0);
 
+  --border-color: #4b4b4b4b;
+
   --image-size: 130px;
   --drop-shadow-blur: 3px;
   --radius: 5px;
   --outline: 2px solid grey;
+  --padding: 50px;
+
+  --popup-padding: 20px;
 }
 
 nav {
