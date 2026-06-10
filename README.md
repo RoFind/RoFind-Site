@@ -1,8 +1,11 @@
 # RoFind
 > Discover games worth playing, shared by the people who actually play them.
 
+> man idk what im doing anymore i've spent days on this project.
+
 ![Status](https://img.shields.io/badge/status-In%20Development-orange)
-![License](https://img.shields.io/badge/license-Custom-red)
+[![License](https://img.shields.io/badge/license-Custom-red)](#license)
+[![Demo](https://img.shields.io/badge/demo-live-blue)](https://ro-find.vercel.app)
 
 ---
 
@@ -16,18 +19,14 @@
 <p align="center"><sub>These are early screenshots.</sub></p>
 
 ## What is RoFind?
-RoFind is an open-source platform where players recommend, rate, and discover games together. Inpired by [better discovery](https://www.roblox.com/games/15317947079/better-discovery) - Mariage Sorcière on roblox.
-
-
-## Demo
-A live demo isn't up yet (I'm working on it). You can peek at the UI previews above, or clone it locally to see where things are heading.
+RoFind is an open-source platform where players recommend, rate, and discover games together. Inspired by [better discovery](https://www.roblox.com/games/15317947079/better-discovery) - Mariage Sorcière on Roblox.
 
 ## (_Planned_) Features
 - Browse games submitted by the community
 - Rate and leave reviews
 - Filter by genre, author, or popularity
 - Submit your own game for others to find
-- Login to save your reviews and rating
+- Login to save your reviews and ratings
 
 ## Getting Started
 
