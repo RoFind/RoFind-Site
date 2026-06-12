@@ -1,16 +1,11 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
+const fs = require('fs');
 
 module.exports = {
   packagerConfig: {
     asar: true,
     icon: './src/core/icon.ico',
-    // protocols: [
-    //   {
-    //     name: 'RoFind',
-    //     schemes: ['rofind']
-    //   }
-    // ]
   },
   rebuildConfig: {},
   makers: [
@@ -33,13 +28,25 @@ module.exports = {
       config: {},
     },
   ],
+  hooks: {
+
+    postMake: async (forgeConfig, makeResults) => {
+      const fs = require('fs');
+      const version = require('./package.json').version;
+
+      makeResults.forEach(result => {
+        result.artifacts.forEach(artifactPath => {
+          console.log(`Built v${version}: ${artifactPath}`);
+        });
+      });
+    }
+
+  },
   plugins: [
     {
       name: '@electron-forge/plugin-auto-unpack-natives',
       config: {},
     },
-    // Fuses are used to enable/disable various Electron functionality
-    // at package time, before code signing the application
     new FusesPlugin({
       version: FuseVersion.V1,
       [FuseV1Options.RunAsNode]: false,

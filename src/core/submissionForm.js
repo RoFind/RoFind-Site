@@ -62,8 +62,9 @@ function verifyUser() {
     console.log("Verify user");
 }
 
-function submitSubmission() {
+async function submitSubmission() {
     console.log("Submit");
+    await window.discordAPI.send({ content: "I am RoBert!" });
 }
 
 function cancelSubmission() {

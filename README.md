@@ -1,7 +1,7 @@
 # RoFind
 > Discover games worth playing, shared by the people who actually play them.
 
-> man idk what im doing anymore i've spent days on this project.
+> I've been working on the desktop version but for now ill push more features on the web version! (6/13/2026)
 
 ![Status](https://img.shields.io/badge/status-In%20Development-orange)
 [![License](https://img.shields.io/badge/license-Custom-red)](#license)
@@ -51,14 +51,13 @@ Got an idea or found a bug? Contributions are welcome! (I'm still new with JS an
 
 ## Roadmap
 - [ ] Game submission system
-  - Im having trouble here pls chill
 - [ ] User profiles
 - [ ] Rating & review system
 - [ ] Search & filtering
 - [ ] Moderation tools
 
 ## License
-Free to use and modify. Just give me a heads up before redistributing.
+[MIT](./LICENSE)
 
 ---
 

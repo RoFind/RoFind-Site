@@ -1,5 +1,5 @@
 const { BrowserWindow } = require('electron');
-const fetch = require('node-fetch');
+
 const {
     generateCodeVerifier,
     generateCodeChallenge,

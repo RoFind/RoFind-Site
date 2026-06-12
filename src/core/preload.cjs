@@ -161,6 +161,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openRoblox: (placeId) => shell.openExternal(`roblox://placeId=${placeId}`),
 });
 
+contextBridge.exposeInMainWorld('discordAPI', {
+  send: (payload) => ipcRenderer.invoke('send-to-discord', payload)
+});
+
 contextBridge.exposeInMainWorld('oauthAPI', {
   loginRoblox: () => ipcRenderer.invoke('oauth:roblox')
 });
